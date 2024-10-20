@@ -28,6 +28,19 @@ public:
     void Error(const std::string& message);
     void Initialized();
 
+    template <typename T>
+    void Input(T& input, const std::string& prompt)
+    {
+        std::cout << prompt;
+        std::cin >> input;
+
+        std::string temp = prompt + " " + std::to_string(input);
+
+        Info(temp);
+    }
+    
+    void Input(std::string& input, const std::string& prompt);
+
 private:
     std::ofstream filestream_;
     std::mutex mutex_;

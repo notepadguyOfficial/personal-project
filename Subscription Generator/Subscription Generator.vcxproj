@@ -143,6 +143,7 @@
     <ClInclude Include="..\Secret\hash.h" />
     <ClInclude Include="..\Secret\hwid.h" />
     <ClInclude Include="..\Secret\Logs.h" />
+    <ClInclude Include="..\Secret\XOR.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

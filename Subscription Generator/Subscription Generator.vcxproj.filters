@@ -44,5 +44,8 @@
     <ClInclude Include="..\Secret\Date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Secret\XOR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "Logs.h"
 #include <mutex>
+#include "XOR.h"
 
 Logs& Logs::GetInstance()
 {
@@ -14,7 +15,7 @@ void Logs::SetLogFile(const std::string& filename)
 
 	if (!filestream_)
 	{
-		std::cerr << "Error opening the file!" << std::endl;
+		std::cerr << XorStr("Error opening the file!") << std::endl;
 	}
 }
 
@@ -27,7 +28,7 @@ std::string Logs::GetCurrentTime()
 {
 	std::time_t now = std::time(nullptr);
 	char buffer[100];
-	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+	std::strftime(buffer, sizeof(buffer), XorStr("%Y-%m-%d %H:%M:%S"), std::localtime(&now));
 	return std::string(buffer);
 }
 
@@ -35,19 +36,19 @@ std::string Logs::FormatFileName()
 {
 	std::time_t now = std::time(nullptr);
 	char buffer[100];
-	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", std::localtime(&now));
-	return "Secret_" + std::string(buffer) + ".log";
+	std::strftime(buffer, sizeof(buffer), XorStr("%Y-%m-%d_%H-%M-%S"), std::localtime(&now));
+	return XorStr("Secret_") + std::string(buffer) + XorStr(".log");
 }
 
 std::string Logs::LogLevelToString(LOG_LEVEL level)
 {
 	switch (level)
 	{
-	case LOG_LEVEL::DEBUG: return "DEBUG";
-	case LOG_LEVEL::INFO: return "INFO";
-	case LOG_LEVEL::WARNING: return "WARNING";
-	case LOG_LEVEL::ERROR: return "ERROR";
-	default: return "UKNOWN";
+	case LOG_LEVEL::DEBUG: return XorStr("DEBUG");
+	case LOG_LEVEL::INFO: return XorStr("INFO");
+	case LOG_LEVEL::WARNING: return XorStr("WARNING");
+	case LOG_LEVEL::ERROR: return XorStr("ERROR");
+	default: return XorStr("UKNOWN");
 	}
 }
 
@@ -94,11 +95,21 @@ void Logs::Error(const std::string& message)
 	Print(message, LOG_LEVEL::ERROR);
 }
 
+void Logs::Input(std::string& input, const std::string& prompt)
+{
+	std::cout << prompt;
+	std::cin >> input;
+
+	std::string temp = prompt + " " + input;
+
+	Info(temp);
+}
+
 void Logs::Initialized()
 {
 	GetInstance();
 #if _DEBUG
-	SetLogFile("Test.log");
+	SetLogFile(XorStr("Test.log"));
 #else
 	SetLogFile(FormatFileName());
 #endif

@@ -2,6 +2,7 @@
 #include "Logs.h"
 #include "hwid.h"
 #include "Date.h"
+#include "XOR.h"
 
 int main(int argc, const char* argv[])
 {
@@ -9,33 +10,34 @@ int main(int argc, const char* argv[])
 	HWID.getHWID();
 
 #if NDEBUG
-	Log.Info("HWID: " + HWID.HardwareIdentification);
+	Log.Info(XorStr("HWID: ") + HWID.HardwareIdentification);
 #endif
 
-	if (!HWID.SaveToDat("hwid.dat", HWID.HardwareIdentification))
+	if (!HWID.SaveToDat(XorStr("hwid.dat"), HWID.HardwareIdentification))
 	{
-		Log.Error("Unable to Save HWID!");
+		Log.Error(XorStr("Unable to Save HWID!"));
 		exit(EXIT_FAILURE);
 	}
 	else
-		Log.Info("Successfully Saved HWID");
+		Log.Info(XorStr("Successfully Saved HWID"));
 
 	int days;
 
-	Log.Info("How Many Days before it expires: ");
-	std::cin >> days;
+	Log.Input(days, XorStr("How Many Days before it expires: "));
 
 	std::time_t days_timestamp = date_t.GetExpiryDate(days);
 	std::string time_temp = date_t.TimeToString(days_timestamp);
-	Log.Info("Expires on: " + time_temp);
+	Log.Info(XorStr("Expires on: ") + time_temp);
 
-	if (date_t.SaveToBin("License.bin", days_timestamp))
-		Log.Info("Successfully Saved Date Data");
+	if (date_t.SaveToBin(XorStr("License.bin"), days_timestamp))
+		Log.Info(XorStr("Successfully Saved Date Data"));
 	else
 	{
-		Log.Error("Unable to Save Date Data");
+		Log.Error(XorStr("Unable to Save Date Data"));
 		exit(EXIT_FAILURE);
 	}
+
+	system(XorStr("pause"));
 
 	return 0;
 }
